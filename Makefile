@@ -15,16 +15,16 @@
 SHELL=/bin/sh
 
 # To assist in cross-compiling
-CC=gcc
-AR=ar
-RANLIB=ranlib
+CC=arm-mingw32ce-gcc
+AR=arm-mingw32ce-ar
+RANLIB=arm-mingw32ce-ranlib
 LDFLAGS=
 
 BIGFILES=-D_FILE_OFFSET_BITS=64
 CFLAGS=-Wall -Winline -O2 -g $(BIGFILES)
 
 # Where you want it installed when you do 'make install'
-PREFIX=/usr/local
+PREFIX=/usr/arm-mingw32ce
 
 
 OBJS= blocksort.o  \
@@ -107,6 +107,14 @@ install: bzip2 bzip2recover
 	echo ".so man1/bzgrep.1" > $(PREFIX)/man/man1/bzfgrep.1
 	echo ".so man1/bzmore.1" > $(PREFIX)/man/man1/bzless.1
 	echo ".so man1/bzdiff.1" > $(PREFIX)/man/man1/bzcmp.1
+
+install-lib: libbz2.a
+	if ( test ! -d $(PREFIX)/lib ) ; then mkdir -p $(PREFIX)/lib ; fi
+	if ( test ! -d $(PREFIX)/include ) ; then mkdir -p $(PREFIX)/include ; fi
+	cp -f bzlib.h $(PREFIX)/include
+	chmod a+r $(PREFIX)/include/bzlib.h
+	cp -f libbz2.a $(PREFIX)/lib
+	chmod a+r $(PREFIX)/lib/libbz2.a
 
 clean: 
 	rm -f *.o libbz2.a bzip2 bzip2recover \
